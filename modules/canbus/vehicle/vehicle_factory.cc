@@ -26,6 +26,8 @@
 #include "modules/canbus/vehicle/transit/transit_vehicle_factory.h"
 #include "modules/canbus/vehicle/wey/wey_vehicle_factory.h"
 #include "modules/canbus/vehicle/zhongyun/zhongyun_vehicle_factory.h"
+#include "modules/canbus/vehicle/yunle/yunle_vehicle_factory.h"
+#include "modules/canbus/vehicle/mk_mini/mk_mini_vehicle_factory.h"
 #include "modules/canbus/vehicle/apple/apple_vehicle_factory.h"
 
 namespace apollo {
@@ -61,6 +63,12 @@ void VehicleFactory::RegisterVehicleFactory() {
   });
   Register(apollo::common::NEOLIX, []() -> AbstractVehicleFactory * {
     return new Neolix_eduVehicleFactory();
+  });
+  Register(apollo::common::YUNLE, []() -> AbstractVehicleFactory * {
+    return new YunleVehicleFactory();
+  });
+  Register(apollo::common::MK_MINI, []() -> AbstractVehicleFactory * {
+    return new Mk_miniVehicleFactory();
   });
   Register(apollo::common::APPLE, []() -> AbstractVehicleFactory * {
     return new AppleVehicleFactory();
