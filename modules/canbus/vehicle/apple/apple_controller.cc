@@ -340,7 +340,7 @@ void AppleController::Throttle(double pedal) {
   throttle_62_->set_pedal(pedal);
   */
 }
-void ApolloController::Speed(double linear_vel, double angular_vel) {
+void AppleController::Speed(double linear_vel, double angular_vel) {
   if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE &&
       driving_mode() != Chassis::AUTO_SPEED_ONLY) {
     AINFO << "Skip wheel speed control: not in auto drive mode.";
