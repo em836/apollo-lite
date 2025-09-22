@@ -37,9 +37,7 @@ enum VehicleBrand {
   CH = 7;
   DKIT = 8;
   NEOLIX = 9;
-  MK_MINI = 10;
-
-  YUNLE = 50;
+  APPLE = 10;
 }
 
 message LatencyParam {
@@ -95,11 +93,6 @@ message VehicleParam {
   optional LatencyParam steering_latency_param = 22;
   optional LatencyParam throttle_latency_param = 23;
   optional LatencyParam brake_latency_param = 24;
-
-  // min turn parameters
-  optional double max_front_wheel_steer = 25;
-  optional double max_back_wheel_steer = 26;
-  optional double track_width = 27;
 }
 
 message VehicleConfig {
