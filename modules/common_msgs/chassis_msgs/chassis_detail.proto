@@ -12,6 +12,8 @@ import "modules/common_msgs/chassis_msgs/neolix_edu.proto";
 import "modules/common_msgs/chassis_msgs/transit.proto";
 import "modules/common_msgs/chassis_msgs/wey.proto";
 import "modules/common_msgs/chassis_msgs/zhongyun.proto";
+import "modules/common_msgs/chassis_msgs/mk_mini.proto";
+import "modules/common_msgs/chassis_msgs/yunle.proto";
 import "modules/common_msgs/chassis_msgs/apple.proto";
 
 message ChassisDetail {
@@ -46,7 +48,10 @@ message ChassisDetail {
   optional Ch ch = 24;
   optional Devkit devkit = 25;
   optional Neolix_edu neolix_edu = 26;
-  optional Apple apple = 27;
+  optional Mk_mini mk_mini = 27;
+  optional Apple apple = 28;
+
+  optional Yunle yunle = 50;
 
   // Reserve fields for other vehicles
   optional apollo.common.VehicleID vehicle_id = 101;

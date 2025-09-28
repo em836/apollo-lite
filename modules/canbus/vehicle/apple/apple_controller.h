@@ -80,7 +80,7 @@ class AppleController final : public VehicleController {
   
   // drive with speed
   // unit: m/s
-  void Speed(double speed) override;
+  void Speed(double linear, double angular) override;
 
   // drive with acceleration/deceleration
   // acc:-7.0~5.0 unit:m/s^2

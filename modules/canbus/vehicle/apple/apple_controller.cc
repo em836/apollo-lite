@@ -479,7 +479,7 @@ void AppleController::SetHorn(const ControlCommand& command) {
 }
 
 void AppleController::SetTurningSignal(const ControlCommand& command) {
-   // Set Turn Signal
+  // Set Turn Signal
    auto signal = command.signal().turn_signal();
   // 1. 转向灯
   if (signal == common::VehicleSignal::TURN_LEFT) {
@@ -621,6 +621,7 @@ bool AppleController::CheckResponse(const int32_t flags, bool need_wait) {
 
   AINFO << "check_response fail: is_vcu_online:" << is_vcu_online;
   return false;
+
 }
 
 void AppleController::set_chassis_error_mask(const int32_t mask) {

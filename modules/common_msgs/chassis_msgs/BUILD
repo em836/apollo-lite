@@ -3,59 +3,25 @@ load("@com_google_protobuf//bazel:proto_library.bzl", "proto_library")
 load("@com_google_protobuf//bazel:cc_proto_library.bzl", "cc_proto_library")
 load("@com_google_protobuf//bazel:py_proto_library.bzl", "py_proto_library")
 
+
 package(default_visibility = ["//visibility:public"])
 
 cc_proto_library(
-    name = "zhongyun_cc_proto",
+    name = "wey_cc_proto",
     deps = [
-        ":zhongyun_proto",
+        ":wey_proto",
     ],
 )
 
 proto_library(
-    name = "zhongyun_proto",
-    srcs = ["zhongyun.proto"],
+    name = "wey_proto",
+    srcs = ["wey.proto"],
 )
 
 py_proto_library(
-    name = "zhongyun_py_pb2",
-    deps = [":zhongyun_proto"],
+    name = "wey_py_pb2",
+    deps = [":wey_proto"],
 )
-
-cc_proto_library(
-    name = "ch_cc_proto",
-    deps = [
-        ":ch_proto",
-    ],
-)
-
-proto_library(
-    name = "ch_proto",
-    srcs = ["ch.proto"],
-)
-
-py_proto_library(
-    name = "ch_py_pb2",
-    deps = [":ch_proto"],
-)
-
-cc_proto_library(
-    name = "lexus_cc_proto",
-    deps = [
-        ":lexus_proto",
-    ],
-)
-
-proto_library(
-    name = "lexus_proto",
-    srcs = ["lexus.proto"],
-)
-
-py_proto_library(
-    name = "lexus_py_pb2",
-    deps = [":lexus_proto"],
-)
-
 cc_proto_library(
     name = "transit_cc_proto",
     deps = [
@@ -72,24 +38,38 @@ py_proto_library(
     name = "transit_py_pb2",
     deps = [":transit_proto"],
 )
-
 cc_proto_library(
-    name = "devkit_cc_proto",
+    name = "mk_mini_cc_proto",
     deps = [
-        ":devkit_proto",
+        ":mk_mini_proto",
     ],
 )
 
 proto_library(
-    name = "devkit_proto",
-    srcs = ["devkit.proto"],
+    name = "mk_mini_proto",
+    srcs = ["mk_mini.proto"],
 )
 
 py_proto_library(
-    name = "devkit_py_pb2",
-    deps = [":devkit_proto"],
+    name = "mk_mini_py_pb2",
+    deps = [":mk_mini_proto"],
+)
+cc_proto_library(
+    name = "lexus_cc_proto",
+    deps = [
+        ":lexus_proto",
+    ],
 )
 
+proto_library(
+    name = "lexus_proto",
+    srcs = ["lexus.proto"],
+)
+
+py_proto_library(
+    name = "lexus_py_pb2",
+    deps = [":lexus_proto"],
+)
 cc_proto_library(
     name = "ge3_cc_proto",
     deps = [
@@ -106,7 +86,6 @@ py_proto_library(
     name = "ge3_py_pb2",
     deps = [":ge3_proto"],
 )
-
 cc_proto_library(
     name = "apple_cc_proto",
     deps = [
@@ -123,37 +102,22 @@ py_proto_library(
     name = "apple_py_pb2",
     deps = [":apple_proto"],
 )
-
 cc_proto_library(
-    name = "chassis_detail_cc_proto",
+    name = "ch_cc_proto",
     deps = [
-        ":chassis_detail_proto",
+        ":ch_proto",
     ],
 )
 
 proto_library(
-    name = "chassis_detail_proto",
-    srcs = ["chassis_detail.proto"],
-    deps = [
-        ":ch_proto",
-        ":chassis_proto",
-        ":devkit_proto",
-        ":ge3_proto",
-        ":lexus_proto",
-        ":neolix_edu_proto",
-        ":transit_proto",
-        ":wey_proto",
-        ":zhongyun_proto",
-        ":apple_proto",
-        "//modules/common_msgs/basic_msgs:vehicle_id_proto",
-    ],
+    name = "ch_proto",
+    srcs = ["ch.proto"],
 )
 
 py_proto_library(
-    name = "chassis_detail_py_pb2",
-    deps = [":chassis_detail_proto"],
+    name = "ch_py_pb2",
+    deps = [":ch_proto"],
 )
-
 cc_proto_library(
     name = "neolix_edu_cc_proto",
     deps = [
@@ -170,7 +134,38 @@ py_proto_library(
     name = "neolix_edu_py_pb2",
     deps = [":neolix_edu_proto"],
 )
+cc_proto_library(
+    name = "yunle_cc_proto",
+    deps = [
+        ":yunle_proto",
+    ],
+)
 
+proto_library(
+    name = "yunle_proto",
+    srcs = ["yunle.proto"],
+)
+
+py_proto_library(
+    name = "yunle_py_pb2",
+    deps = [":yunle_proto"],
+)
+cc_proto_library(
+    name = "zhongyun_cc_proto",
+    deps = [
+        ":zhongyun_proto",
+    ],
+)
+
+proto_library(
+    name = "zhongyun_proto",
+    srcs = ["zhongyun.proto"],
+)
+
+py_proto_library(
+    name = "zhongyun_py_pb2",
+    deps = [":zhongyun_proto"],
+)
 cc_proto_library(
     name = "chassis_cc_proto",
     deps = [
@@ -196,18 +191,50 @@ py_proto_library(
 )
 
 cc_proto_library(
-    name = "wey_cc_proto",
+    name = "chassis_detail_cc_proto",
     deps = [
-        ":wey_proto",
+        ":chassis_detail_proto",
     ],
 )
 
 proto_library(
-    name = "wey_proto",
-    srcs = ["wey.proto"],
+    name = "chassis_detail_proto",
+    srcs = ["chassis_detail.proto"],
+    deps = [
+        "//modules/common_msgs/basic_msgs:vehicle_id_proto",
+        ":chassis_proto",
+        ":ch_proto",
+        ":devkit_proto",
+        ":ge3_proto",
+        ":lexus_proto",
+        ":neolix_edu_proto",
+        ":transit_proto",
+        ":wey_proto",
+        ":zhongyun_proto",
+        ":mk_mini_proto",
+        ":yunle_proto",
+        ":apple_proto",
+    ],
 )
 
 py_proto_library(
-    name = "wey_py_pb2",
-    deps = [":wey_proto"],
+    name = "chassis_detail_py_pb2",
+    deps = [":chassis_detail_proto"],
+)
+
+cc_proto_library(
+    name = "devkit_cc_proto",
+    deps = [
+        ":devkit_proto",
+    ],
+)
+
+proto_library(
+    name = "devkit_proto",
+    srcs = ["devkit.proto"],
+)
+
+py_proto_library(
+    name = "devkit_py_pb2",
+    deps = [":devkit_proto"],
 )
