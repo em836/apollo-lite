@@ -39,7 +39,6 @@ enum VehicleBrand {
   NEOLIX = 9;
   MK_MINI = 10;
   APPLE = 11;
-
   YUNLE = 50;
 }
 

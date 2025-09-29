@@ -121,42 +121,29 @@ Chassis AppleController::chassis() {
 
   // 3
   chassis_.set_engine_started(true);
-  /* ADD YOUR OWN CAR CHASSIS OPERATION
-  */
   // 检查右前轮状态报文 (ID: 438)
-  if (chassis_detail.has_apple() && chassis_detail.apple().has_wheel_fr_status_438()) {
-    auto fr_report = chassis_detail.apple().wheel_fr_status_438();
-    if (fr_report.has_speed_fr()) {
-        total_speed += fr_report.speed_fr();
-        valid_wheel_count++;
-    }
+  if (chassis_detail.has_apple() && chassis_detail.apple().has_wheel_fr_status_1b6()) {
+    auto fr_report = chassis_detail.apple().wheel_fr_status_1b6();
+   
 }
 
   // 检查左前轮状态报文 (ID: 439)  
-  if (chassis_detail.has_apple() && chassis_detail.apple().has_wheel_fl_status_439()) {
-    auto fl_report = chassis_detail.apple().wheel_fl_status_439();
-    if (fl_report.has_speed_fl()) {
-        total_speed += fl_report.speed_fl();
-        valid_wheel_count++;
+  if (chassis_detail.has_apple() && chassis_detail.apple().has_wheel_fl_status_1b7()) {
+    auto fl_report = chassis_detail.apple().wheel_fl_status_1b7();
+    
     }
-}
+
 
   // 检查左后轮状态报文 (ID: 440)
-  if (chassis_detail.has_apple() && chassis_detail.apple().has_wheel_rl_status_440()) {
-    auto rl_report = chassis_detail.apple().wheel_rl_status_440();
-    if (rl_report.has_speed_rl()) {
-        total_speed += rl_report.speed_rl();
-        valid_wheel_count++;
-    }
+  if (chassis_detail.has_apple() && chassis_detail.apple().has_wheel_rl_status_1b8()) {
+    auto rl_report = chassis_detail.apple().wheel_rl_status_1b8();
+  
 }
 
   // 检查右后轮状态报文 (ID: 441)
-  if (chassis_detail.has_apple() && chassis_detail.apple().has_wheel_rr_status_441()) {
-    auto rr_report = chassis_detail.apple().wheel_rr_status_441();
-    if (rr_report.has_speed_rr()) {
-        total_speed += rr_report.speed_rr();
-        valid_wheel_count++;
-    }
+  if (chassis_detail.has_apple() && chassis_detail.apple().has_wheel_rr_status_1b9()) {
+    auto rr_report = chassis_detail.apple().wheel_rr_status_1b9();
+    
 }
 
   return chassis_;
@@ -174,24 +161,25 @@ ErrorCode AppleController::EnableAutoMode() {
   }
   return ErrorCode::OK;
   // 右前轮控制
-  wheel_fr_control_->set_speed_fr_ctrl(0); // 设置目标速度
-  wheel_fr_control_->set_running_state_fr(2); // 设置为运行状态
-  wheel_fr_control_->set_direction_state_fr(1); // 设置为前进
+  Wheel_fr_control_2b6->set_speed_fr_ctrl(0); // 设置目标速度
+  Wheel_fr_control_2b6->set_running_state_fr(2); // 设置为运行状态
+  Wheel_fr_control_2b6->set_direction_state_fr(1); // 设置为前进
   
   // 左前轮控制
-  wheel_fl_control_->set_speed_fl_ctrl(0);
-  wheel_fl_control_->set_running_state_fl(2);
-  wheel_fl_control_->set_direction_state_fl(1);
+  Wheel_fl_control_2b7->set_speed_fl_ctrl(0);
+  Wheel_fl_control_2b7->set_running_state_fl(2);
+  Wheel_fl_control_2b7->set_direction_state_fl(1);
   
   // 左后轮控制
-  wheel_rl_control_->set_speed_rl_ctrl(0);
-  wheel_rl_control_->set_running_state_rl(2);
-  wheel_rl_control_->set_direction_state_rl(1);
+  Wheel_rl_control_2b8->set_speed_rl_ctrl(0);
+  Wheel_rl_control_2b8->set_running_state_rl(2);
+  Wheel_rl_control_2b8->set_direction_state_rl(1);
   
   // 右后轮控制
-  wheel_rr_control_->set_speed_rr_ctrl(0);
-  wheel_rr_control_->set_running_state_rr(2);
-  wheel_rr_control_->set_direction_state_rr(1);
+  Wheel_rr_control_2b9->set_speed_rr_ctrl(0);
+  Wheel_rr_control_2b9->set_running_state_rr(2);
+  Wheel_rr_control_2b9->set_direction_state_rr(1);
+
 
   can_sender_->Update();
   const int32_t flag =
@@ -205,7 +193,7 @@ ErrorCode AppleController::EnableAutoMode() {
   set_driving_mode(Chassis::COMPLETE_AUTO_DRIVE);
   AINFO << "Switch to COMPLETE_AUTO_DRIVE mode ok.";
   return ErrorCode::OK;
-  */
+
 }
 
 ErrorCode AppleController::DisableAutoMode() {
@@ -240,6 +228,7 @@ ErrorCode AppleController::EnableSteeringOnlyMode() {
   AINFO << "Switch to AUTO_STEER_ONLY mode ok.";
   return ErrorCode::OK;
   */
+  return ErrorCode::OK;
 }
 
 ErrorCode AppleController::EnableSpeedOnlyMode() {
@@ -265,6 +254,7 @@ ErrorCode AppleController::EnableSpeedOnlyMode() {
   AINFO << "Switch to AUTO_SPEED_ONLY mode ok.";
   return ErrorCode::OK;
   */
+  return ErrorCode::OK;
 }
 
 // NEUTRAL, REVERSE, DRIVE
@@ -340,7 +330,8 @@ void AppleController::Throttle(double pedal) {
   throttle_62_->set_pedal(pedal);
   */
 }
-void AppleController::Speed(double linear_vel, double angular_vel) {
+
+void AppleController::DifferentialSpeed(double linear_vel, double angular_vel) {
   if (driving_mode() != Chassis::COMPLETE_AUTO_DRIVE &&
       driving_mode() != Chassis::AUTO_SPEED_ONLY) {
     AINFO << "Skip wheel speed control: not in auto drive mode.";
@@ -380,21 +371,22 @@ void AppleController::Speed(double linear_vel, double angular_vel) {
   double rpm_rl = mps_to_rpm(v_rl);
 
   // === 下发到报文 ===
-  wheel_fr_control_694_->set_speed_fr_ctrl(rpm_fr);
-  wheel_fr_control_694_->set_runningstate_fr(fabs(v_fr) > 1e-3 ? 2 : 0);
-  wheel_fr_control_694_->set_directionstate_fr(v_fr >= 0 ? 1 : 0);
+  Wheel_fr_control_2b6->set_speed_fr_ctrl(rpm_fr);
+  Wheel_fr_control_2b6->set_runningstate_fr(fabs(v_fr) > 1e-3 ? 2 : 0);
+  
+  Wheel_fr_control_2b6->set_directionstate_fr(v_fr >= 0 ? 1 : 0);
 
-  wheel_fl_control_695_->set_speed_fl_ctrl(rpm_fl);
-  wheel_fl_control_695_->set_runningstate_fl(fabs(v_fl) > 1e-3 ? 2 : 0);
-  wheel_fl_control_695_->set_directionstate_fl(v_fl >= 0 ? 1 : 0);
+  Wheel_fl_control_2b7->set_speed_fl_ctrl(rpm_fl);
+  Wheel_fl_control_2b7->set_runningstate_fl(fabs(v_fl) > 1e-3 ? 2 : 0);
+  Wheel_fl_control_2b7->set_directionstate_fl(v_fl >= 0 ? 1 : 0);
 
-  wheel_rr_control_697_->set_speed_rr_ctrl(rpm_rr);
-  wheel_rr_control_697_->set_runningstate_rr(fabs(v_rr) > 1e-3 ? 2 : 0);
-  wheel_rr_control_697_->set_directionstate_rr(v_rr >= 0 ? 1 : 0);
+  Wheel_rr_control_2b9->set_speed_rr_ctrl(rpm_rr);
+  Wheel_rr_control_2b9->set_runningstate_rr(fabs(v_rr) > 1e-3 ? 2 : 0);
+  Wheel_rr_control_2b9->set_directionstate_rr(v_rr >= 0 ? 1 : 0);
 
-  wheel_rl_control_696_->set_speed_rl_ctrl(rpm_rl);
-  wheel_rl_control_696_->set_runningstate_rl(fabs(v_rl) > 1e-3 ? 2 : 0);
-  wheel_rl_control_696_->set_directionstate_rl(v_rl >= 0 ? 1 : 0);
+  Wheel_rl_control_2b8->set_speed_rl_ctrl(rpm_rl);
+  Wheel_rl_control_2b8->set_runningstate_rl(fabs(v_rl) > 1e-3 ? 2 : 0);
+  Wheel_rl_control_2b8->set_directionstate_rl(v_rl >= 0 ? 1 : 0);
 
   AINFO << "Cmd: v=" << linear_vel << " m/s, w=" << angular_vel
         << " rad/s -> RPMs [FR:" << rpm_fr << ", FL:" << rpm_fl
@@ -483,26 +475,25 @@ void AppleController::SetTurningSignal(const ControlCommand& command) {
    auto signal = command.signal().turn_signal();
   // 1. 转向灯
   if (signal == common::VehicleSignal::TURN_LEFT) {
-    light_control_->set_light_type(Light_Control::Light_Type::LEFT_TURN_LIGHT);
-    light_control_->set_light_switch(Light_Control::Light_Switch::ON);
+    Light_control_7ff->set_light_type(Light_Control::Light_Type::LEFT_TURN_LIGHT);
+    Light_control_7ff->set_light_switch(Light_Control::Light_Switch::ON);
   } else if (signal == common::VehicleSignal::TURN_RIGHT) {
-    light_control_->set_light_type(Light_Control::Light_Type::RIGHT_TURN_LIGHT);
-    light_control_->set_light_switch(Light_Control::Light_Switch::ON);
+    Light_control_7ff->set_light_type(Light_Control::Light_Type::RIGHT_TURN_LIGHT);
+    Light_control_7ff->set_light_switch(Light_Control::Light_Switch::ON);
   } else {
     // 没有转向信号时关闭转向灯
-    light_control_->set_light_switch(Light_Control::Light_Switch::OFF);
+    Light_control_7ff->set_light_switch(Light_Control::Light_Switch::OFF);
   }
 
   // 2. 刹车灯
   if (command.brake()) {
-    light_control_->set_light_type(Light_Control::Light_Type::BRAKE_LIGHT);
-    light_control_->set_light_switch(Light_Control::Light_Switch::ON);
+    Light_control_7ff->set_light_type(Light_Control::Light_Type::BRAKE_LIGHT);
+    Light_control_7ff->set_light_switch(Light_Control::Light_Switch::ON);
   } else {
-    light_control_->set_light_type(Light_Control::Light_Type::BRAKE_LIGHT);
-    light_control_->set_light_switch(Light_Control::Light_Switch::OFF);
+    Light_control_7ff->set_light_type(Light_Control::Light_Type::BRAKE_LIGHT);
+    Light_control_7ff->set_light_switch(Light_Control::Light_Switch::OFF);
   }
 }
-
 
 void AppleController::ResetProtocol() {
   message_manager_->ResetSendMessages();
@@ -540,9 +531,9 @@ void AppleController::SecurityDogThreadFunc() {
          mode == Chassis::AUTO_STEER_ONLY) &&
         CheckResponse(CHECK_RESPONSE_STEER_UNIT_FLAG, false) == false) {
       ++horizontal_ctrl_fail;
-      if (horizontal_ctrl_fail >= kMaxFailAttempt) {
+      if (horizontal_ctrl_fail >=  kMaxFailAttempt) {
         emergency_mode = true;
-        set_chassis_error_code(Chassis::MANUAL_INTERVENTION);
+        Chassis_ErrorCode(Chassis::MANUAL_INTERVENTION);
       }
     } else {
       horizontal_ctrl_fail = 0;
@@ -555,7 +546,7 @@ void AppleController::SecurityDogThreadFunc() {
       ++vertical_ctrl_fail;
       if (vertical_ctrl_fail >= kMaxFailAttempt) {
         emergency_mode = true;
-        set_chassis_error_code(Chassis::MANUAL_INTERVENTION);
+         Chassis_ErrorCode(Chassis::MANUAL_INTERVENTION);
       }
     } else {
       vertical_ctrl_fail = 0;
@@ -596,15 +587,18 @@ bool AppleController::CheckResponse(const int32_t flags, bool need_wait) {
 
     bool check_ok = true;
 
-    if (flags & CHECK_RESPONSE_SPEED_UNIT_FLAG) {
-      // 判断 VCU 四个轮子的运行状态是否在线（假设 1 表示在线）
-      is_vcu_online =
-          chassis_detail.vcu().running_state_fr() == 1 &&
-          chassis_detail.vcu().running_state_fl() == 1 &&
-          chassis_detail.vcu().running_state_rl() == 1 &&
-          chassis_detail.vcu().running_state_rr() == 1;
-
-      check_ok = check_ok && is_vcu_online;
+    if (flags & CHECK_RESPONSE_SPEED_UNIT_FLAG) {  
+    // 使用轮速有效性 + 是否大于等于0 来判断是否在线      
+     is_vcu_online =       
+      chassis_detail.vehicle_spd().is_wheel_spd_fr_valid() &&        
+      chassis_detail.vehicle_spd().is_wheel_spd_fl_valid() &&        
+      chassis_detail.vehicle_spd().is_wheel_spd_rl_valid() &&       
+      chassis_detail.vehicle_spd().is_wheel_spd_rr_valid() &&         
+      chassis_detail.vehicle_spd().wheel_spd_fr() >= 0.0 &&        
+      chassis_detail.vehicle_spd().wheel_spd_fl() >= 0.0 &&         
+      chassis_detail.vehicle_spd().wheel_spd_rl() >= 0.0 &&        
+      chassis_detail.vehicle_spd().wheel_spd_rr() >= 0.0;   
+    check_ok = check_ok && is_vcu_online;
     }
 
     if (check_ok) {
@@ -621,8 +615,8 @@ bool AppleController::CheckResponse(const int32_t flags, bool need_wait) {
 
   AINFO << "check_response fail: is_vcu_online:" << is_vcu_online;
   return false;
-
 }
+
 
 void AppleController::set_chassis_error_mask(const int32_t mask) {
   std::lock_guard<std::mutex> lock(chassis_mask_mutex_);
@@ -635,13 +629,13 @@ int32_t AppleController::chassis_error_mask() {
 }
 
 Chassis::ErrorCode AppleController::chassis_error_code() {
-  std::lock_guard<std::mutex> lock(chassis_error_code_mutex_);
+  std::lock_guard<std::mutex> lock(chassis_error_code);
   return chassis_error_code_;
 }
 
 void AppleController::set_chassis_error_code(
     const Chassis::ErrorCode& error_code) {
-  std::lock_guard<std::mutex> lock(chassis_error_code_mutex_);
+  std::lock_guard<std::mutex> lock(chassis_error_code);
   chassis_error_code_ = error_code;
 }
 

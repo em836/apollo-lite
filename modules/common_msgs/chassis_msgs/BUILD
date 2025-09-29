@@ -7,54 +7,6 @@ load("@com_google_protobuf//bazel:py_proto_library.bzl", "py_proto_library")
 package(default_visibility = ["//visibility:public"])
 
 cc_proto_library(
-    name = "wey_cc_proto",
-    deps = [
-        ":wey_proto",
-    ],
-)
-
-proto_library(
-    name = "wey_proto",
-    srcs = ["wey.proto"],
-)
-
-py_proto_library(
-    name = "wey_py_pb2",
-    deps = [":wey_proto"],
-)
-cc_proto_library(
-    name = "transit_cc_proto",
-    deps = [
-        ":transit_proto",
-    ],
-)
-
-proto_library(
-    name = "transit_proto",
-    srcs = ["transit.proto"],
-)
-
-py_proto_library(
-    name = "transit_py_pb2",
-    deps = [":transit_proto"],
-)
-cc_proto_library(
-    name = "mk_mini_cc_proto",
-    deps = [
-        ":mk_mini_proto",
-    ],
-)
-
-proto_library(
-    name = "mk_mini_proto",
-    srcs = ["mk_mini.proto"],
-)
-
-py_proto_library(
-    name = "mk_mini_py_pb2",
-    deps = [":mk_mini_proto"],
-)
-cc_proto_library(
     name = "lexus_cc_proto",
     deps = [
         ":lexus_proto",
@@ -71,36 +23,20 @@ py_proto_library(
     deps = [":lexus_proto"],
 )
 cc_proto_library(
-    name = "ge3_cc_proto",
+    name = "wey_cc_proto",
     deps = [
-        ":ge3_proto",
+        ":wey_proto",
     ],
 )
 
 proto_library(
-    name = "ge3_proto",
-    srcs = ["ge3.proto"],
+    name = "wey_proto",
+    srcs = ["wey.proto"],
 )
 
 py_proto_library(
-    name = "ge3_py_pb2",
-    deps = [":ge3_proto"],
-)
-cc_proto_library(
-    name = "apple_cc_proto",
-    deps = [
-        ":apple_proto",
-    ],
-)
-
-proto_library(
-    name = "apple_proto",
-    srcs = ["apple.proto"],
-)
-
-py_proto_library(
-    name = "apple_py_pb2",
-    deps = [":apple_proto"],
+    name = "wey_py_pb2",
+    deps = [":wey_proto"],
 )
 cc_proto_library(
     name = "ch_cc_proto",
@@ -117,38 +53,6 @@ proto_library(
 py_proto_library(
     name = "ch_py_pb2",
     deps = [":ch_proto"],
-)
-cc_proto_library(
-    name = "neolix_edu_cc_proto",
-    deps = [
-        ":neolix_edu_proto",
-    ],
-)
-
-proto_library(
-    name = "neolix_edu_proto",
-    srcs = ["neolix_edu.proto"],
-)
-
-py_proto_library(
-    name = "neolix_edu_py_pb2",
-    deps = [":neolix_edu_proto"],
-)
-cc_proto_library(
-    name = "yunle_cc_proto",
-    deps = [
-        ":yunle_proto",
-    ],
-)
-
-proto_library(
-    name = "yunle_proto",
-    srcs = ["yunle.proto"],
-)
-
-py_proto_library(
-    name = "yunle_py_pb2",
-    deps = [":yunle_proto"],
 )
 cc_proto_library(
     name = "zhongyun_cc_proto",
@@ -191,6 +95,102 @@ py_proto_library(
 )
 
 cc_proto_library(
+    name = "apple_cc_proto",
+    deps = [
+        ":apple_proto",
+    ],
+)
+
+proto_library(
+    name = "apple_proto",
+    srcs = ["apple.proto"],
+)
+
+py_proto_library(
+    name = "apple_py_pb2",
+    deps = [":apple_proto"],
+)
+cc_proto_library(
+    name = "mk_mini_cc_proto",
+    deps = [
+        ":mk_mini_proto",
+    ],
+)
+
+proto_library(
+    name = "mk_mini_proto",
+    srcs = ["mk_mini.proto"],
+)
+
+py_proto_library(
+    name = "mk_mini_py_pb2",
+    deps = [":mk_mini_proto"],
+)
+cc_proto_library(
+    name = "ge3_cc_proto",
+    deps = [
+        ":ge3_proto",
+    ],
+)
+
+proto_library(
+    name = "ge3_proto",
+    srcs = ["ge3.proto"],
+)
+
+py_proto_library(
+    name = "ge3_py_pb2",
+    deps = [":ge3_proto"],
+)
+cc_proto_library(
+    name = "transit_cc_proto",
+    deps = [
+        ":transit_proto",
+    ],
+)
+
+proto_library(
+    name = "transit_proto",
+    srcs = ["transit.proto"],
+)
+
+py_proto_library(
+    name = "transit_py_pb2",
+    deps = [":transit_proto"],
+)
+cc_proto_library(
+    name = "devkit_cc_proto",
+    deps = [
+        ":devkit_proto",
+    ],
+)
+
+proto_library(
+    name = "devkit_proto",
+    srcs = ["devkit.proto"],
+)
+
+py_proto_library(
+    name = "devkit_py_pb2",
+    deps = [":devkit_proto"],
+)
+cc_proto_library(
+    name = "neolix_edu_cc_proto",
+    deps = [
+        ":neolix_edu_proto",
+    ],
+)
+
+proto_library(
+    name = "neolix_edu_proto",
+    srcs = ["neolix_edu.proto"],
+)
+
+py_proto_library(
+    name = "neolix_edu_py_pb2",
+    deps = [":neolix_edu_proto"],
+)
+cc_proto_library(
     name = "chassis_detail_cc_proto",
     deps = [
         ":chassis_detail_proto",
@@ -223,18 +223,18 @@ py_proto_library(
 )
 
 cc_proto_library(
-    name = "devkit_cc_proto",
+    name = "yunle_cc_proto",
     deps = [
-        ":devkit_proto",
+        ":yunle_proto",
     ],
 )
 
 proto_library(
-    name = "devkit_proto",
-    srcs = ["devkit.proto"],
+    name = "yunle_proto",
+    srcs = ["yunle.proto"],
 )
 
 py_proto_library(
-    name = "devkit_py_pb2",
-    deps = [":devkit_proto"],
+    name = "yunle_py_pb2",
+    deps = [":yunle_proto"],
 )

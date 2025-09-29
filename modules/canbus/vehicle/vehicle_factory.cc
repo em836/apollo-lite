@@ -30,7 +30,6 @@
 #include "modules/canbus/vehicle/wey/wey_vehicle_factory.h"
 #include "modules/canbus/vehicle/yunle/yunle_vehicle_factory.h"
 #include "modules/canbus/vehicle/zhongyun/zhongyun_vehicle_factory.h"
-#include "modules/canbus/vehicle/apple/apple_vehicle_factory.h"
 namespace apollo {
 namespace canbus {
 
@@ -69,9 +68,6 @@ void VehicleFactory::RegisterVehicleFactory() {
   });
   Register(apollo::common::YUNLE, []() -> AbstractVehicleFactory * {
     return new YunleVehicleFactory();
-  });
-  Register(apollo::common::APPLE, []() -> AbstractVehicleFactory * {
-  return new AppleVehicleFactory();
   });
 }
 
