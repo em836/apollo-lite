@@ -14,7 +14,7 @@
  * limitations under the License.
  *****************************************************************************/
 
-#include "modules/canbus/vehicle/apple/protocol/wheel_fr_status_1b6.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_fr_status_1b6.h"
 
 #include "glog/logging.h"
 
@@ -23,19 +23,24 @@
 
 namespace apollo {
 namespace canbus {
-namespace apple {
+namespace bxk {
 
 using ::apollo::drivers::canbus::Byte;
 
 Wheelfrstatus1b6::Wheelfrstatus1b6() {}
 const int32_t Wheelfrstatus1b6::ID = 0x1B6;
 
+uint32_t Wheelfrstatus1b6::GetPeriod() const {
+  static const uint32_t PERIOD = 0 * 1000;
+  return PERIOD;
+}
+
 void Wheelfrstatus1b6::Parse(const std::uint8_t* bytes, int32_t length,
                          ChassisDetail* chassis) const {
-  chassis->mutable_apple()->mutable_wheel_fr_status_1b6()->set_errorcode_fr(errorcode_fr(bytes, length));
-  chassis->mutable_apple()->mutable_wheel_fr_status_1b6()->set_statusword_fr(statusword_fr(bytes, length));
-  chassis->mutable_apple()->mutable_wheel_fr_status_1b6()->set_torque_fr(torque_fr(bytes, length));
-  chassis->mutable_apple()->mutable_wheel_fr_status_1b6()->set_speed_fr(speed_fr(bytes, length));
+  chassis->mutable_bxk()->mutable_wheel_fr_status_1b6()->set_errorcode_fr(errorcode_fr(bytes, length));
+  chassis->mutable_bxk()->mutable_wheel_fr_status_1b6()->set_statusword_fr(statusword_fr(bytes, length));
+  chassis->mutable_bxk()->mutable_wheel_fr_status_1b6()->set_torque_fr(torque_fr(bytes, length));
+  chassis->mutable_bxk()->mutable_wheel_fr_status_1b6()->set_speed_fr(speed_fr(bytes, length));
 }
 
 // config detail: {'bit': 0, 'enum': {0: 'ERRORCODE_FR_NOERROR', 1: 'ERRORCODE_FR_OVERVOLTAGE', 2: 'ERRORCODE_FR_UNDERVOLTAGE', 4: 'ERRORCODE_FR_OVERCURRENT', 5: 'ERRORCODE_FR_CONTROLLEROVERTEMP', 6: 'ERRORCODE_FR_MOTOROVERTEMP', 9: 'ERRORCODE_FR_MCUUNDERVOLTAGE', 11: 'ERRORCODE_FR_ENCODERSPIERROR', 12: 'ERRORCODE_FR_ENCODERAMPLITUDELOW', 13: 'ERRORCODE_FR_ENCODERAMPLITUDEHIGH', 14: 'ERRORCODE_FR_MEMORYSTORAGEERROR', 18: 'ERRORCODE_FR_THREEPHASEIMBALANCE', 23: 'ERRORCODE_FR_APPCONFIGSTORAGEERROR', 24: 'ERRORCODE_FR_CONTROLCONFIGSTORAGEERROR', 28: 'ERRORCODE_FR_ENCODERERROR', 30: 'ERRORCODE_FR_COMMUNICATIONLOST'}, 'is_signed_var': False, 'len': 8, 'name': 'errorcode_fr', 'offset': 0.0, 'order': 'intel', 'physical_range': '[0|30]', 'physical_unit': '', 'precision': 1.0, 'type': 'enum'}
@@ -94,6 +99,6 @@ double Wheelfrstatus1b6::speed_fr(const std::uint8_t* bytes, int32_t length) con
   double ret = x * 0.010000;
   return ret;
 }
-}  // namespace apple
+}  // namespace bxk
 }  // namespace canbus
 }  // namespace apollo

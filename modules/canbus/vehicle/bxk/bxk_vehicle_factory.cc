@@ -14,10 +14,10 @@
  * limitations under the License.
  *****************************************************************************/
 
-#include "modules/canbus/vehicle/apple/apple_vehicle_factory.h"
+#include "modules/canbus/vehicle/bxk/bxk_vehicle_factory.h"
 
-#include "modules/canbus/vehicle/apple/apple_controller.h"
-#include "modules/canbus/vehicle/apple/apple_message_manager.h"
+#include "modules/canbus/vehicle/bxk/bxk_controller.h"
+#include "modules/canbus/vehicle/bxk/bxk_message_manager.h"
 #include "cyber/common/log.h"
 #include "modules/common/util/util.h"
 
@@ -25,14 +25,14 @@ namespace apollo {
 namespace canbus {
 
 std::unique_ptr<VehicleController>
-AppleVehicleFactory::CreateVehicleController() {
-  return std::unique_ptr<VehicleController>(new apple::AppleController());
+BxkVehicleFactory::CreateVehicleController() {
+  return std::unique_ptr<VehicleController>(new bxk::BxkController());
 }
 
 std::unique_ptr<MessageManager<::apollo::canbus::ChassisDetail>>
-AppleVehicleFactory::CreateMessageManager() {
+BxkVehicleFactory::CreateMessageManager() {
   return std::unique_ptr<MessageManager<::apollo::canbus::ChassisDetail>>(
-	new apple::AppleMessageManager());
+	new bxk::BxkMessageManager());
 }
 
 }  // namespace canbus

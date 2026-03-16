@@ -14,42 +14,40 @@
  * limitations under the License.
  *****************************************************************************/
 
-#include "modules/canbus/vehicle/apple/apple_message_manager.h"
+#include "modules/canbus/vehicle/bxk/bxk_message_manager.h"
 
+#include "modules/canbus/vehicle/bxk/protocol/light_control_7ff.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_fl_control_2b7.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_fr_control_2b6.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_rl_control_2b8.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_rr_control_2b9.h"
 
-
-#include "modules/canbus/vehicle/apple/protocol/light_control_7ff.h"
-#include "modules/canbus/vehicle/apple/protocol/wheel_fl_control_2b7.h"
-#include "modules/canbus/vehicle/apple/protocol/wheel_fl_status_1b7.h"
-#include "modules/canbus/vehicle/apple/protocol/wheel_fr_control_2b6.h"
-#include "modules/canbus/vehicle/apple/protocol/wheel_fr_status_1b6.h"
-#include "modules/canbus/vehicle/apple/protocol/wheel_rl_control_2b8.h"
-#include "modules/canbus/vehicle/apple/protocol/wheel_rl_status_1b8.h"
-#include "modules/canbus/vehicle/apple/protocol/wheel_rr_control_2b9.h"
-#include "modules/canbus/vehicle/apple/protocol/wheel_rr_status_1b9.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_fl_status_1b7.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_fr_status_1b6.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_rl_status_1b8.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_rr_status_1b9.h"
 
 namespace apollo {
 namespace canbus {
-namespace apple {
+namespace bxk {
 
-AppleMessageManager::AppleMessageManager() {
+BxkMessageManager::BxkMessageManager() {
   // Control Messages
-
+  AddSendProtocolData<Lightcontrol7ff, true>();
+  AddSendProtocolData<Wheelflcontrol2b7, true>();
+  AddSendProtocolData<Wheelfrcontrol2b6, true>();
+  AddSendProtocolData<Wheelrlcontrol2b8, true>();
+  AddSendProtocolData<Wheelrrcontrol2b9, true>();
 
   // Report Messages
-  AddRecvProtocolData<Lightcontrol7ff, true>();
-  AddRecvProtocolData<Wheelflcontrol2b7, true>();
   AddRecvProtocolData<Wheelflstatus1b7, true>();
-  AddRecvProtocolData<Wheelfrcontrol2b6, true>();
   AddRecvProtocolData<Wheelfrstatus1b6, true>();
-  AddRecvProtocolData<Wheelrlcontrol2b8, true>();
   AddRecvProtocolData<Wheelrlstatus1b8, true>();
-  AddRecvProtocolData<Wheelrrcontrol2b9, true>();
   AddRecvProtocolData<Wheelrrstatus1b9, true>();
 }
 
-AppleMessageManager::~AppleMessageManager() {}
+BxkMessageManager::~BxkMessageManager() {}
 
-}  // namespace apple
+}  // namespace bxk
 }  // namespace canbus
 }  // namespace apollo

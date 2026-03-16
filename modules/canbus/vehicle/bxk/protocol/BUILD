@@ -3,7 +3,7 @@ load("//tools:cpplint.bzl", "cpplint")
 package(default_visibility = ["//visibility:public"])
 
 cc_library(
-    name = "canbus_apple_protocol",
+    name = "canbus_bxk_protocol",
     srcs = glob([
         "*.cc",
     ]),

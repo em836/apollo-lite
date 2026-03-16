@@ -19,31 +19,34 @@
 #include <memory>
 #include <thread>
 
-#include "modules/canbus/vehicle/vehicle_controller.h"
-
 #include "modules/canbus/proto/canbus_conf.pb.h"
-#include "modules/common_msgs/chassis_msgs/chassis.pb.h"
 #include "modules/canbus/proto/vehicle_parameter.pb.h"
 #include "modules/common_msgs/basic_msgs/error_code.pb.h"
+#include "modules/common_msgs/chassis_msgs/chassis.pb.h"
 #include "modules/common_msgs/control_msgs/control_cmd.pb.h"
 
-
+#include "modules/canbus/vehicle/bxk/protocol/light_control_7ff.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_fl_control_2b7.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_fr_control_2b6.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_rl_control_2b8.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_rr_control_2b9.h"
+#include "modules/canbus/vehicle/vehicle_controller.h"
 
 namespace apollo {
 namespace canbus {
-namespace apple {
+namespace bxk {
 
-class AppleController final : public VehicleController {
+class BxkController final : public VehicleController {
  public:
+  explicit BxkController() {};
 
-  explicit AppleController() {};
-
-  virtual ~AppleController();
+  virtual ~BxkController();
 
   ::apollo::common::ErrorCode Init(
       const VehicleParameter& params,
-      CanSender<::apollo::canbus::ChassisDetail> *const can_sender,
-      MessageManager<::apollo::canbus::ChassisDetail> *const message_manager) override;
+      CanSender<::apollo::canbus::ChassisDetail>* const can_sender,
+      MessageManager<::apollo::canbus::ChassisDetail>* const message_manager)
+      override;
 
   bool Start() override;
 
@@ -77,10 +80,10 @@ class AppleController final : public VehicleController {
   // drive with old acceleration
   // gas:0.00~99.99 unit:
   void Throttle(double throttle) override;
-  
+
   // drive with speed
-  // unit: m/s
-  void DifferentialSpeed(double linear, double angular) override;
+  // unit: m/s, fwd:+, rev:-
+  virtual void Speed(double speed) override;
 
   // drive with acceleration/deceleration
   // acc:-7.0~5.0 unit:m/s^2
@@ -94,6 +97,11 @@ class AppleController final : public VehicleController {
   // angle:-99.99~0.00~99.99, unit:, left:+, right:-
   // angle_spd:0.00~99.99, unit:deg/s
   void Steer(double angle, double angle_spd) override;
+
+  // drive and steer with differential speed
+  // linear_speed: m/s, fwd:+, rev:-
+  // angular_speed: rad/s, left:+, right:-
+  void DifferentialSpeed(double linear_speed, double angular_speed) override;
 
   // set Electrical Park Brake
   void SetEpbBreak(const ::apollo::control::ControlCommand& command) override;
@@ -115,7 +123,11 @@ class AppleController final : public VehicleController {
 
  private:
   // control protocol
-
+  Lightcontrol7ff* light_control_7ff_ = nullptr;
+  Wheelflcontrol2b7* wheel_fl_control_2b7_ = nullptr;
+  Wheelfrcontrol2b6* wheel_fr_control_2b6_ = nullptr;
+  Wheelrlcontrol2b8* wheel_rl_control_2b8_ = nullptr;
+  Wheelrrcontrol2b9* wheel_rr_control_2b9_ = nullptr;
 
   Chassis chassis_;
   std::unique_ptr<std::thread> thread_;
@@ -128,6 +140,6 @@ class AppleController final : public VehicleController {
   int32_t chassis_error_mask_ = 0;
 };
 
-}  // namespace apple
+}  // namespace bxk
 }  // namespace canbus
 }  // namespace apollo

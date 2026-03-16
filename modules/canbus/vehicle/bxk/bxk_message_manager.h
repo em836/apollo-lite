@@ -21,18 +21,18 @@
 
 namespace apollo {
 namespace canbus {
-namespace apple {
+namespace bxk {
 
 using ::apollo::drivers::canbus::MessageManager;
 
-class AppleMessageManager
+class BxkMessageManager
 	: public MessageManager<::apollo::canbus::ChassisDetail> {
  public:
-  AppleMessageManager();
-  virtual ~AppleMessageManager();
+  BxkMessageManager();
+  virtual ~BxkMessageManager();
 };
 
-}  // namespace apple
+}  // namespace bxk
 }  // namespace canbus
 }  // namespace apollo
 

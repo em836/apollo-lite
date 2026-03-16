@@ -21,13 +21,16 @@
 
 namespace apollo {
 namespace canbus {
-namespace apple {
+namespace bxk {
 
 class Wheelrlstatus1b8 : public ::apollo::drivers::canbus::ProtocolData<
                     ::apollo::canbus::ChassisDetail> {
  public:
   static const int32_t ID;
   Wheelrlstatus1b8();
+
+  uint32_t GetPeriod() const override;
+
   void Parse(const std::uint8_t* bytes, int32_t length,
                      ChassisDetail* chassis) const override;
 
@@ -46,7 +49,7 @@ class Wheelrlstatus1b8 : public ::apollo::drivers::canbus::ProtocolData<
   double speed_rl(const std::uint8_t* bytes, const int32_t length) const;
 };
 
-}  // namespace apple
+}  // namespace bxk
 }  // namespace canbus
 }  // namespace apollo
 

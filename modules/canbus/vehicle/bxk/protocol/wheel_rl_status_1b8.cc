@@ -14,7 +14,7 @@
  * limitations under the License.
  *****************************************************************************/
 
-#include "modules/canbus/vehicle/apple/protocol/wheel_rl_status_1b8.h"
+#include "modules/canbus/vehicle/bxk/protocol/wheel_rl_status_1b8.h"
 
 #include "glog/logging.h"
 
@@ -23,19 +23,24 @@
 
 namespace apollo {
 namespace canbus {
-namespace apple {
+namespace bxk {
 
 using ::apollo::drivers::canbus::Byte;
 
 Wheelrlstatus1b8::Wheelrlstatus1b8() {}
 const int32_t Wheelrlstatus1b8::ID = 0x1B8;
 
+uint32_t Wheelrlstatus1b8::GetPeriod() const {
+  static const uint32_t PERIOD = 0 * 1000;
+  return PERIOD;
+}
+
 void Wheelrlstatus1b8::Parse(const std::uint8_t* bytes, int32_t length,
                          ChassisDetail* chassis) const {
-  chassis->mutable_apple()->mutable_wheel_rl_status_1b8()->set_errorcode_rl(errorcode_rl(bytes, length));
-  chassis->mutable_apple()->mutable_wheel_rl_status_1b8()->set_statusword_rl(statusword_rl(bytes, length));
-  chassis->mutable_apple()->mutable_wheel_rl_status_1b8()->set_torque_rl(torque_rl(bytes, length));
-  chassis->mutable_apple()->mutable_wheel_rl_status_1b8()->set_speed_rl(speed_rl(bytes, length));
+  chassis->mutable_bxk()->mutable_wheel_rl_status_1b8()->set_errorcode_rl(errorcode_rl(bytes, length));
+  chassis->mutable_bxk()->mutable_wheel_rl_status_1b8()->set_statusword_rl(statusword_rl(bytes, length));
+  chassis->mutable_bxk()->mutable_wheel_rl_status_1b8()->set_torque_rl(torque_rl(bytes, length));
+  chassis->mutable_bxk()->mutable_wheel_rl_status_1b8()->set_speed_rl(speed_rl(bytes, length));
 }
 
 // config detail: {'bit': 0, 'enum': {0: 'ERRORCODE_RL_NOERROR', 1: 'ERRORCODE_RL_OVERVOLTAGE', 2: 'ERRORCODE_RL_UNDERVOLTAGE', 4: 'ERRORCODE_RL_OVERCURRENT', 5: 'ERRORCODE_RL_CONTROLLEROVERTEMP', 6: 'ERRORCODE_RL_MOTOROVERTEMP', 9: 'ERRORCODE_RL_MCUUNDERVOLTAGE', 11: 'ERRORCODE_RL_ENCODERSPIERROR', 12: 'ERRORCODE_RL_ENCODERAMPLITUDELOW', 13: 'ERRORCODE_RL_ENCODERAMPLITUDEHIGH', 14: 'ERRORCODE_RL_MEMORYSTORAGEERROR', 18: 'ERRORCODE_RL_THREEPHASEIMBALANCE', 23: 'ERRORCODE_RL_APPCONFIGSTORAGEERROR', 24: 'ERRORCODE_RL_CONTROLCONFIGSTORAGEERROR', 28: 'ERRORCODE_RL_ENCODERERROR', 30: 'ERRORCODE_RL_COMMUNICATIONLOST'}, 'is_signed_var': False, 'len': 8, 'name': 'errorcode_rl', 'offset': 0.0, 'order': 'intel', 'physical_range': '[0|30]', 'physical_unit': '', 'precision': 1.0, 'type': 'enum'}
@@ -94,6 +99,6 @@ double Wheelrlstatus1b8::speed_rl(const std::uint8_t* bytes, int32_t length) con
   double ret = x * 0.010000;
   return ret;
 }
-}  // namespace apple
+}  // namespace bxk
 }  // namespace canbus
 }  // namespace apollo

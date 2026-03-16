@@ -149,6 +149,15 @@ class VehicleController {
    */
   virtual void Steer(double angle, double angle_spd) = 0;
 
+  /**
+   * @brief steer with differential speed
+   * @param linear_speed in m/s
+   * @param angular_speed in rad/s, positive value for left turn
+   * @note this function is only for vehicle supporting differential speed
+   * control, such as electric car with in-wheel motor
+   */
+  virtual void DifferentialSpeed(double linear_speed, double angular_speed) {};
+
   /*
    * @brief set Electrical Park Brake
    */

@@ -28,9 +28,11 @@ CONTROL_TOPIC = "/apollo/control"
 SPEED_MIN, SPEED_MAX = -5.0, 5.0
 STEERING_MIN, STEERING_MAX = -100.0, 100.0
 BRAKE_MIN, BRAKE_MAX = 0.0, 100.0
+STEERING_RATE_MIN, STEERING_RATE_MAX = -6.28, 6.28
 
 SPEED_DELTA = 0.1
 STEERING_DELTA = 1
+STEERING_RATE_DELTA = 0.1
 BRAKE_DELTA = 1
 TURN_SIGNAL_THRESHOLD_DELTA = 1.0
 
@@ -64,6 +66,7 @@ class KeyboardController:
         self.control_cmd_msg = control_cmd_pb2.ControlCommand()
         self.speed = 0
         self.steering = 0.0
+        self.steering_rate = 0.0
         self.turn_signal_threshold = 0.0
         self.speed_delta = speed_delta
         self.steering_delta = steering_delta
@@ -86,6 +89,7 @@ class KeyboardController:
             "  b/B: Brake +/-",
             "  p: Toggle Electronic Parking Brake (EPB)",
             "  o/O: Turn signal threshold +/-",
+            "  A/D: Steering rate +/-",
             "  Space: Emergency stop",
             "  q: Quit program",
         ]
@@ -103,6 +107,8 @@ class KeyboardController:
             ord("p"): self.toggle_epb,
             ord("o"): self.turn_signal_threshold_inc,
             ord("O"): self.turn_signal_threshold_dec,
+            ord("A"): self.steering_rate_inc,
+            ord("D"): self.steering_rate_dec,
             ord(" "): self.emergency_stop,  # space key
         }
 
@@ -168,6 +174,7 @@ class KeyboardController:
             self.control_cmd_msg.throttle = self.speed
             self.control_cmd_msg.speed = self.speed
             self.control_cmd_msg.steering_target = self.steering
+            self.control_cmd_msg.steering_rate = self.steering_rate
             self.control_cmd_msg.gear_location = self.gear
             self.control_cmd_msg.brake = self.brake
             if self.epb == 1:
@@ -248,10 +255,24 @@ class KeyboardController:
             7, 0,
             f"turn signal threshold: {self.turn_signal_threshold:.2f}    ")
 
+    def steering_rate_inc(self):
+        """Increase steering rate (steering delta)"""
+        self.steering_rate = min(self.steering_rate + STEERING_RATE_DELTA,
+                                 STEERING_RATE_MAX)
+        self.screen.addstr(8, 0,
+                           f"steering rate: {self.steering_rate:.2f}    ")
+
+    def steering_rate_dec(self):
+        """Decrease steering rate (steering delta)"""
+        self.steering_rate = max(self.steering_rate - STEERING_RATE_DELTA,
+                                 STEERING_RATE_MIN)
+        self.screen.addstr(8, 0,
+                           f"steering rate: {self.steering_rate:.2f}    ")
+
     def emergency_stop(self):
         self.speed = 0
         self.brake = BRAKE_MAX
-        self.screen.addstr(8, 0, "Emergency Stop activated!       ")
+        self.screen.addstr(9, 0, "Emergency Stop activated!       ")
 
 
 def main(screen):
@@ -268,6 +289,7 @@ def main(screen):
     screen.addstr(5, 0, "brake: 0.00    ")
     screen.addstr(6, 0, "epb:   0       ")
     screen.addstr(7, 0, "turn signal threshold:   0")
+    screen.addstr(8, 0, "steering rate: 0.00    ")
 
     controller = KeyboardController(screen)
     controller.start()

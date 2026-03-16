@@ -55,6 +55,36 @@ struct GPATTFieldParser {
   std::function<bool(const std::string&, forsense::GPATT*)> parse_function;
 };
 
+std::string clean_number_string(const std::string& input) {
+  std::string output;
+
+  if (input.empty()) {
+    return "";
+  }
+
+  bool has_sign = input[0] == '+' || input[0] == '-';
+  // Remove leading and trailing spaces
+  size_t start = has_sign ? 1 : 0;
+  while (start < input.size() && input[start] == ' ') {
+    ++start;
+  }
+  size_t end = input.size();
+  while (end > start && input[end - 1] == ' ') {
+    --end;
+  }
+  output = input.substr(start, end - start);
+  if (has_sign) {
+    // Only prepend the sign if there is at least one digit/character after
+    // trimming
+    if (!output.empty()) {
+      output = input[0] + output;
+    } else {
+      output = "";
+    }
+  }
+  return output;
+}
+
 }  // namespace
 
 static const std::
@@ -130,13 +160,17 @@ static const std::
                 // field 12 latitude
                 {"latitude",
                  [](const std::string& str, forsense::GPYJ* msg) -> bool {
-                   bool ret = absl::SimpleAtod(str, &(msg->latitude));
+                   // Clean the string to remove leading/trailing spaces
+                   bool ret = absl::SimpleAtod(clean_number_string(str),
+                                               &(msg->latitude));
                    return ret;
                  }},
                 // field 13 longitude
                 {"longitude",
                  [](const std::string& str, forsense::GPYJ* msg) -> bool {
-                   bool ret = absl::SimpleAtod(str, &(msg->longitude));
+                   // Longitude may have leading spaces after sign
+                   bool ret = absl::SimpleAtod(clean_number_string(str),
+                                               &(msg->longitude));
                    return ret;
                  }},
                 // field 14 altitude
@@ -333,7 +367,7 @@ ForsenseNmeaParser::ProcessPayload() {
   size_t checksum_delimiter_pos =
       terminator_pos - forsense::NMEA_CRC_LENGTH - 1;
   // Position of the first CRC hex character
-  // size_t crc_chars_start_pos = checksum_delimiter_pos + 1;
+  size_t crc_chars_start_pos = checksum_delimiter_pos + 1;
 
   // Payload data is from 0 to the '*' delimiter, parser follows will check the
   // validation of header
@@ -351,15 +385,14 @@ ForsenseNmeaParser::ProcessPayload() {
   }
 
   // Validate checksum.
-  // the checksum calculation includes the header but not the 1st character `$`
-  // TODO(All): Implement checksum validation
-  // bool checksum_ok = IsChecksumValid(frame_view, 1, crc_chars_start_pos);
+  // the checksum calculation includes the header, but not leading '$'
+  bool checksum_ok = IsChecksumValid(frame_view, 1, crc_chars_start_pos);
 
-  // if (!checksum_ok) {
-  //   AWARN << "Checksum validation failed. Consuming frame.";
-  //   buffer_.Drain(total_frame_length);
-  //   return std::vector<Parser::ParsedMessage>();
-  // }
+  if (!checksum_ok) {
+    AWARN << "Checksum validation failed. Consuming frame.";
+    buffer_.Drain(total_frame_length);
+    return std::vector<Parser::ParsedMessage>();
+  }
 
   // --- Parse payload using the view ---
   // The frame is now validated. Extract payload view and pass to parser.
@@ -394,8 +427,9 @@ bool ForsenseNmeaParser::IsChecksumValid(std::string_view frame_view,
                                          size_t payload_start,
                                          size_t crc_chars_start) {
   // Extract payload view for checksum calculation
-  auto payload_view = frame_view.substr(
-      payload_start, crc_chars_start - payload_start - 1 /* for '*' */);
+  // The payload is from payload_start to just before crc_chars_start - 1
+  auto payload_view =
+      frame_view.substr(payload_start, crc_chars_start - payload_start - 1);
 
   // Extract checksum hex characters view
   auto crc_hex_view =

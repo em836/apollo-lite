@@ -15,7 +15,7 @@
  *****************************************************************************/
 
 /**
- * @file apple_vehicle_factory.h
+ * @file bxk_vehicle_factory.h
  */
 
 #pragma once
@@ -35,26 +35,26 @@ namespace apollo {
 namespace canbus {
 
 /**
- * @class AppleVehicleFactory
+ * @class BxkVehicleFactory
  *
  * @brief this class is inherited from AbstractVehicleFactory. It can be used to
- * create controller and message manager for apple vehicle.
+ * create controller and message manager for bxk vehicle.
  */
-class AppleVehicleFactory : public AbstractVehicleFactory {
+class BxkVehicleFactory : public AbstractVehicleFactory {
  public:
   /**
   * @brief destructor
   */
-  virtual ~AppleVehicleFactory() = default;
+  virtual ~BxkVehicleFactory() = default;
 
   /**
-   * @brief create apple vehicle controller
+   * @brief create bxk vehicle controller
    * @returns a unique_ptr that points to the created controller
    */
   std::unique_ptr<VehicleController> CreateVehicleController() override;
 
   /**
-   * @brief create apple message manager
+   * @brief create bxk message manager
    * @returns a unique_ptr that points to the created message manager
    */
   std::unique_ptr<MessageManager<::apollo::canbus::ChassisDetail>>
