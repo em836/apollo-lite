@@ -144,6 +144,10 @@ ErrorCode VehicleController::Update(const ControlCommand &control_command) {
     }
   }
 
+  if (driving_mode() == Chassis::COMPLETE_AUTO_DRIVE) {
+    DifferentialSpeed(control_command.speed(), control_command.steering_rate());
+  }
+
   if ((driving_mode() == Chassis::COMPLETE_AUTO_DRIVE ||
        driving_mode() == Chassis::AUTO_SPEED_ONLY ||
        driving_mode() == Chassis::AUTO_STEER_ONLY) &&
